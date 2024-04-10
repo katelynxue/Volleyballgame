@@ -1,21 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c60451a6-d06b-42a7-83b4-348a8dee0d4c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/VolleyballGame.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/player1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/player2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/GameLand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Hero.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Volleyball.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/volleyballCourt.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/volleyballPic.png" afterDir="false" />
-    </list>
+    <list default="true" id="c60451a6-d06b-42a7-83b4-348a8dee0d4c" name="Changes" comment="Volleyball game" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -81,6 +67,21 @@
       <option name="presentableId" value="Default" />
       <updated>1709236474265</updated>
     </task>
+    <task id="LOCAL-00001" summary="Volleyball game">
+      <created>1712792951155</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1712792951155</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Volleyball game">
+      <created>1712793027014</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1712793027014</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -99,5 +100,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Volleyball game" />
+    <option name="LAST_COMMIT_MESSAGE" value="Volleyball game" />
   </component>
 </project>
