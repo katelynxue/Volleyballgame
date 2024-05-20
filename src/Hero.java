@@ -32,18 +32,18 @@ public class Hero {
     public void move(){
         //horizontal
         if(rightPressed==true){
-            dx=2;
+            dx=5;
         }else if(leftPressed==true){
-            dx=-2;
+            dx=-5;
         }else {
             dx=0;
         }
 
         //vertical
         if(downPressed==true){
-            dy=2;
+            dy=5;
         }else if(upPressed==true){
-            dy=-2;
+            dy=-5;
         } else {
             dy=0;
         }

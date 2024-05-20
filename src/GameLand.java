@@ -46,6 +46,12 @@ public class GameLand implements Runnable, KeyListener {
     public JPanel panel;
 
     public BufferStrategy bufferStrategy;
+    //declare screen/level booleans
+    public boolean startScreen=true;
+    public boolean isPlaying=false;
+    public boolean gameOver1;
+    public boolean gameOver2;
+    public boolean endScreen=true;
 
     //Declare the objects used in the program below
     /** STEP 1 declare your object and give it a name **/
@@ -54,12 +60,18 @@ public class GameLand implements Runnable, KeyListener {
     public Hero player2;
     public boolean player1IsIntersectingVolleyball;
     public boolean player2IsIntersectingVolleyball;
+    public Obstacle[] basketballs;
 
     /** STEP 2 declare an image for your object**/
     public Image volleyballPic;
     public Image volleyballCourt;
     public Image player1Pic;
     public Image player2Pic;
+    public Image basketballPic;
+    public Image gameOver1Pic;
+    public Image gameOver2Pic;
+    public boolean isBasketballIntersectingPlayer1;
+    public boolean isBasketballIntersectingPlayer2;
 
 
 
@@ -80,9 +92,15 @@ public class GameLand implements Runnable, KeyListener {
         //create (construct) the objects needed for the game below
         //for each object that has a picture, load in images as well
         /** STEP 3 construct a specific Hero **/
-        volleyball = new Volleyball(300,200,2,3,40,40);
-        player1 = new Hero(100,300,3,4,200,190);
-        player2 = new Hero(600,300,4,3,200,258);
+        volleyball = new Volleyball(300,200,3,3,40,40);
+        player1 = new Hero(100,300,5,5,200,190);
+        player2 = new Hero(600,300,5,5,200,258);
+        basketballs = new Obstacle[5];
+        for(int i=0; i<basketballs.length; i=i+1){
+            int randY = (int)(Math.random()*400);
+            int randDx = (int)(Math.random()*800);
+            basketballs[i]= new Obstacle(randDx,randY,1,1);
+        }
 
 
         /** STEP 4 load in the image for your object **/
@@ -90,6 +108,9 @@ public class GameLand implements Runnable, KeyListener {
         volleyballPic = Toolkit.getDefaultToolkit().getImage("volleyballPic.png");
         player1Pic = Toolkit.getDefaultToolkit().getImage("player1.png");
         player2Pic = Toolkit.getDefaultToolkit().getImage("player2.png");
+        basketballPic = Toolkit.getDefaultToolkit().getImage("basketball.jpg");
+        gameOver1Pic = Toolkit.getDefaultToolkit().getImage("gameOver1.png");
+        gameOver2Pic = Toolkit.getDefaultToolkit().getImage("gameOver2.png");
 
 
     }// GameLand()
@@ -106,26 +127,10 @@ public class GameLand implements Runnable, KeyListener {
         while (true) {
             moveThings();  //move all the game objects
             collisions();  //checks for rec intersections
+            checkGameOver();
             render();  // paint the graphics
             pause(20); // sleep for 20 ms
         }
-    }
-
-    //paints things on the screen using bufferStrategy
-    private void render() {
-        Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
-        g.clearRect(0, 0, WIDTH, HEIGHT);
-        g.drawImage(volleyballCourt,0,0,WIDTH,HEIGHT,null);
-
-        /** STEP 5 draw the image of your object to the screen **/
-        g.drawImage(volleyballPic,volleyball.xpos,volleyball.ypos,volleyball.width,volleyball.height,null);
-        g.drawImage(player1Pic,player1.xpos,player1.ypos,player1.width,player1.height,null);
-        g.drawImage(player2Pic,player2.xpos,player2.ypos,player2.width,player2.height,null);
-
-        //dispose the images each time(this allows for the illusion of movement).
-        g.dispose();
-
-        bufferStrategy.show();
     }
 
     public void moveThings() {
@@ -133,7 +138,49 @@ public class GameLand implements Runnable, KeyListener {
         player2.move();
         volleyball.move();
         volleyball.bouncingMove();
+        for(int i=0;i<basketballs.length;i=i+1){
+            basketballs[i].wrappingMove();
+        }
     }
+
+    //paints things on the screen using bufferStrategy
+    private void render() {
+        Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
+        g.clearRect(0, 0, WIDTH, HEIGHT);
+        if(startScreen==true){
+            g.drawString("press space bar to start",400,300);
+        }
+
+        if(isPlaying==true) {
+
+            /** STEP 5 draw the image of your object to the screen **/
+            g.drawImage(volleyballCourt,0,0,WIDTH,HEIGHT,null);
+            g.drawImage(volleyballPic, volleyball.xpos, volleyball.ypos, volleyball.width, volleyball.height, null);
+            g.drawImage(player1Pic, player1.xpos, player1.ypos, player1.width, player1.height, null);
+            g.drawImage(player2Pic, player2.xpos, player2.ypos, player2.width, player2.height, null);
+
+
+            for(int i=0; i<basketballs.length; i=i+1) {
+                g.drawImage(basketballPic, (int)(basketballs[i].xpos),(int)(basketballs[i].ypos), basketballs[i].width, basketballs[i].height,null);
+            }
+
+        }
+        if(gameOver1==true){
+            g.drawImage(gameOver1Pic,0,0,WIDTH,HEIGHT,null);
+            System.out.println("game over 1 is true");
+        }
+        if(gameOver2==true){
+            g.drawImage(gameOver2Pic,0,0,WIDTH,HEIGHT,null);
+            System.out.println("game over 2 is true");
+
+        }
+
+        //dispose the images each time(this allows for the illusion of movement).
+        g.dispose();
+
+        bufferStrategy.show();
+    }
+
     public void collisions() {
         if (player1.rec.intersects(volleyball.rec) && player1IsIntersectingVolleyball == false) {
             player1IsIntersectingVolleyball = true;
@@ -143,7 +190,6 @@ public class GameLand implements Runnable, KeyListener {
         if (player1.rec.intersects(volleyball.rec) && player1IsIntersectingVolleyball == true) {
             player1IsIntersectingVolleyball = false;
         }
-
         if (player2.rec.intersects(volleyball.rec) && player2IsIntersectingVolleyball == false) {
             player2IsIntersectingVolleyball = true;
             volleyball.dx = -volleyball.dx;
@@ -151,6 +197,47 @@ public class GameLand implements Runnable, KeyListener {
         }
         if (player2.rec.intersects(volleyball.rec) && player2IsIntersectingVolleyball == true) {
             player2IsIntersectingVolleyball = false;
+        }
+        for(int i=0;i<basketballs.length;i=i+1) {
+            if (player1.rec.intersects(basketballs[i].rec) && isBasketballIntersectingPlayer1 == false) {
+                isBasketballIntersectingPlayer1 = true;
+              //  System.out.println("ouch");
+                player1.width -= 2;
+                player1.height -= 2;
+                System.out.println("player 1 width: " +player1.width);
+            }
+            if (player1.rec.intersects(basketballs[i].rec) == false) {
+                isBasketballIntersectingPlayer1 = false;
+            }
+        }
+        for(int i=0;i<basketballs.length;i=i+1) {
+            if (player2.rec.intersects(basketballs[i].rec) && isBasketballIntersectingPlayer2 == false) {
+                isBasketballIntersectingPlayer2 = true;
+                // System.out.println("ouch");
+                player2.width -= 2;
+                player2.height -= 2;
+            }
+            if (player2.rec.intersects(basketballs[i].rec) == false) {
+                isBasketballIntersectingPlayer2 = false;
+            }
+        }
+
+
+    }
+    public void checkGameOver(){
+        if(player1.width<11 ){
+            System.out.println("1 oh no");
+          // player1.isAlive=false;
+//            player1.dx=0;
+//            player1.dy=0;
+            gameOver1=true;
+        }
+        if(player2.width<15 ){
+            System.out.println("2 oh no");
+         //   player2.isAlive=false;
+         //   player2.dx=0;
+          //  player2.dy=0;
+            gameOver2=true;
         }
     }
 
@@ -236,6 +323,14 @@ public class GameLand implements Runnable, KeyListener {
     public void keyReleased(KeyEvent e) {
         char key=e.getKeyChar();
         int keyCode=e.getKeyCode();
+
+        //spacebar to start
+        if(keyCode==32){
+            startScreen=false;
+            isPlaying=true;
+        }
+
+        //user control
         if(keyCode==68){
             player1.rightPressed=false;
         }
